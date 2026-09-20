@@ -1,3 +1,5 @@
+import asyncio
+
 from fastapi import APIRouter, UploadFile, File, HTTPException, status
 from ..models.comparison import ComparisonResult
 from ..utils.validation import validate_file, validate_extracted_text
@@ -63,9 +65,13 @@ async def compare_documents(
             detail=f"Document B validation error: {e.detail}"
         )
 
-    # 3. Extract text
-    raw_text_a = extract_document_text(contents_a, ext_a)
-    raw_text_b = extract_document_text(contents_b, ext_b)
+    # 3. Extract the independent documents concurrently in the bounded
+    # default asyncio executor rather than blocking the event loop or waiting
+    # for Document A before starting Document B.
+    raw_text_a, raw_text_b = await asyncio.gather(
+        asyncio.to_thread(extract_document_text, contents_a, ext_a),
+        asyncio.to_thread(extract_document_text, contents_b, ext_b),
+    )
 
     # 4. Validate extracted text
     try:
