@@ -1,6 +1,6 @@
 # LexPilot
 
-LexPilot is a GenAI-powered legal document navigation and analysis assistant that enables users to review, compare, navigate, and query complex contracts and legal texts with complete document-grounded traceability and zero fabricated claims.
+LexPilot is a GenAI-powered legal document navigation and analysis assistant that enables users to review, compare, navigate, and query complex contracts and legal texts with complete document-grounded traceability.
 
 ---
 
@@ -8,11 +8,27 @@ LexPilot is a GenAI-powered legal document navigation and analysis assistant tha
 
 LexPilot guides users through five integrated stages of legal document intelligence:
 
-1. **Analyze**: Upload contracts (PDF, DOCX, or TXT up to 10 MB) to extract structured legal terms—parties, important dates, financial commitments, key obligations, termination clauses, and items requiring human attention.
+1. **Analyze**: Upload contracts (PDF, DOCX, or TXT up to 10 MB) to extract structured legal terms—parties, important dates, financial commitments, key obligations, termination clauses, and items requiring attention.
 2. **Compare**: Upload two agreements side-by-side to automatically detect modified, added, and removed provisions across standard categories with neutral diffing.
 3. **Navigate**: Explore structured document sections with smooth scrolling, quick-jump anchors, and visual focus highlighting.
 4. **Ask**: Query the document in natural language with guaranteed document-grounded responses, contextual suggested questions, and explicit confidence boundaries.
-5. **Trace Evidence**: Verify every extracted claim, change, and answer against verbatim source text excerpts, section references, and clear grounding statuses (`directly_stated`, `not_specified`, or `insufficient_evidence`).
+5. **Trace Evidence**: Verify every extracted claim, change, and answer against verbatim source text excerpts, section references, and clear grounding statuses (`directly_stated`, `not_specified`, or `insufficient_detail`).
+
+---
+
+## Chosen Challenge Vertical
+
+LexPilot addresses the **"Legal Information & Basic Assistance"** vertical. It fits this vertical by helping users analyze, compare, navigate, and ask questions about user-provided legal documents using document-grounded AI.
+
+---
+
+## Assumptions
+
+- LexPilot analyzes only documents provided by the user.
+- Extracted text is assumed to represent the readable content of the uploaded document.
+- LexPilot does not determine legal enforceability or jurisdiction-specific validity.
+- Missing information is reported as **"Not specified in the document"** rather than inferred.
+- LexPilot provides informational and educational assistance and does not replace a qualified legal professional.
 
 ---
 
@@ -62,7 +78,7 @@ User / Browser
 │  3. Security & Prompt Injection Boundary (untrusted data)   │
 │  4. Gemini Service (google-genai SDK, structured prompts)   │
 │  5. Pydantic v2 Schema Validation & Model Deserialization   │
-│  6. SourceEvidence Normalization & Status Classification     │
+│  6. SourceEvidence Normalization & Status Classification    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -176,11 +192,11 @@ All endpoints are hosted by the backend and proxied through the Express server u
 
 LexPilot incorporates strict safeguards to guarantee accuracy, transparency, and safe AI usage:
 
-1. **Document-Grounded Generation**: The Gemini model is instructed to act strictly on what is written in the contract text. It is forbidden from using external legal assumptions, jurisdiction rules, or common-law conventions.
-2. **Source Evidence**: Every critical fact (party identity, obligation, date, dollar amount, termination clause, or attention item) is paired with a `SourceEvidence` structure containing verbatim quotes and section pointers.
-3. **Handling of Missing Information**: If a provision is omitted from the contract, LexPilot explicitly returns `"Not specified in the document."` with `evidence_status: "not_specified"` rather than guessing or fabricating terms.
-4. **Anti-Hallucination & Anti-Fabrication**: Prompts explicitly forbid inventing section numbers, paragraph numbers, coordinates, or clause titles. If a heading does not exist in the source document, the section is set to `null`.
-5. **Prompt Injection Hardening**: All user inputs (uploaded files and Q&A questions) are quarantined as untrusted data. Embedded instructions attempting to override system rules, leak keys, or roleplay as a lawyer are ignored.
+1. **Document-Grounded Generation**: The Gemini model is instructed to act strictly on what is written in the contract text. It is forbidden from using external legal assumptions, jurisdiction rules, or unstated facts.
+2. **Source Evidence**: Every critical fact (party identity, obligation, date, dollar amount, termination clause, or attention item) is paired with a `SourceEvidence` structure containing verbatim quotations and source location details.
+3. **Handling of Missing Information**: If a provision is omitted from the contract, LexPilot explicitly returns `"Not specified in the document."` with `evidence_status: "not_specified"` rather than guessing.
+4. **Anti-Hallucination & Anti-Fabrication**: Prompts explicitly forbid inventing section numbers, paragraph numbers, coordinates, or clause titles. If a heading does not exist in the source document, it is not fabricated.
+5. **Prompt Injection Hardening**: All user inputs (uploaded files and Q&A questions) are quarantined as untrusted data. Embedded instructions attempting to override system rules, leak keys, or replace the task are ignored.
 6. **No Subjective Scoring**: LexPilot deliberately avoids speculative "contract risk scores", letter grades, or biased ratings, presenting factual, neutral comparisons and observations.
 
 ---
@@ -220,7 +236,7 @@ python3 -m pytest backend/tests/ -v
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/lexpilot.git
+git clone https://github.com/YuvrajGora/lexpilot.git
 cd lexpilot
 ```
 
@@ -280,4 +296,4 @@ npm run build
 ## Disclaimer
 
 > ⚠️ **Important Notice**:  
-> LexPilot is an AI-powered document navigation and informational analysis tool. It is designed solely for educational and informational purposes and does **not** constitute formal legal advice, legal opinion, or legal representation. LexPilot does not create an attorney-client relationship. Always consult a qualified attorney licensed in your jurisdiction for legal matters or contract negotiations.
+> LexPilot is an AI-powered document navigation and informational analysis tool. It is designed solely for educational and informational purposes and does **not** constitute formal legal advice, legal representation, or a substitute for consultation with a qualified legal professional. Always consult a qualified legal professional for advice about your specific situation.
