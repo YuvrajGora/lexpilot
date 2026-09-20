@@ -1,0 +1,69 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build and production artifacts
+dist/
+build/
+dist-ssr/
+*.local
+
+# Environment variables
+.env
+.env.*
+.env*.local
+!.env.example
+
+# Python caches and bytecode
+__pycache__/
+*.py[cod]
+*.pyc
+*$py.class
+*.so
+.Python
+
+# Python virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing and coverage caches
+.pytest_cache/
+.coverage
+htmlcov/
+coverage/
+.tox/
+.nox/
+
+# Package distributions
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Logs and runtime files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor and OS caches
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+

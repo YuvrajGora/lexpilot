@@ -1,0 +1,6 @@
+{
+  "name": "LexPilot",
+  "description": "GenAI-powered legal document navigation assistant that helps users understand complex legal documents using plain-language explanations and source-grounded analysis.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
