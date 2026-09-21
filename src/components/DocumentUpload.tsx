@@ -144,6 +144,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
           ref={inputRef}
           type="file"
           id="legal-document-input"
+          aria-label="Upload legal document"
           accept=".pdf,.docx,.txt"
           onChange={handleChange}
           className="hidden"

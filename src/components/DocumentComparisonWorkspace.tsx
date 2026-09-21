@@ -245,6 +245,14 @@ export const DocumentComparisonWorkspace: React.FC<DocumentComparisonWorkspacePr
                 onDragOver={handleDragA}
                 onDrop={handleDropA}
                 onClick={() => inputRefA.current?.click()}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    inputRefA.current?.click();
+                  }
+                }}
                 className={`flex flex-1 flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 text-center cursor-pointer transition-colors ${
                   dragActiveA
                     ? 'border-stone-900 bg-stone-50'
@@ -256,6 +264,7 @@ export const DocumentComparisonWorkspace: React.FC<DocumentComparisonWorkspacePr
                   type="file"
                   accept=".pdf,.docx,.txt"
                   id="document-a-input"
+                  aria-label="Upload document for Version A"
                   className="hidden"
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     if (e.target.files && e.target.files[0]) {
@@ -343,6 +352,14 @@ export const DocumentComparisonWorkspace: React.FC<DocumentComparisonWorkspacePr
                 onDragOver={handleDragB}
                 onDrop={handleDropB}
                 onClick={() => inputRefB.current?.click()}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    inputRefB.current?.click();
+                  }
+                }}
                 className={`flex flex-1 flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 text-center cursor-pointer transition-colors ${
                   dragActiveB
                     ? 'border-stone-900 bg-stone-50'
@@ -354,6 +371,7 @@ export const DocumentComparisonWorkspace: React.FC<DocumentComparisonWorkspacePr
                   type="file"
                   accept=".pdf,.docx,.txt"
                   id="document-b-input"
+                  aria-label="Upload document for Version B"
                   className="hidden"
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     if (e.target.files && e.target.files[0]) {

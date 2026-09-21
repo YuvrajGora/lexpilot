@@ -1,6 +1,7 @@
 import os
 import json
 import logging
+import asyncio
 from fastapi import HTTPException, status
 from pydantic import ValidationError
 
@@ -220,15 +221,17 @@ class GeminiService(AIService):
     async def _call_model(self, client, model_name: str, prompt: str) -> AnalysisResult:
         from google.genai import types
 
-        response = client.models.generate_content(
+        config = types.GenerateContentConfig(
+            system_instruction=SYSTEM_INSTRUCTION,
+            response_mime_type="application/json",
+            response_schema=AnalysisResult,
+            temperature=0.1,
+        )
+        response = await asyncio.to_thread(
+            client.models.generate_content,
             model=model_name,
             contents=prompt,
-            config=types.GenerateContentConfig(
-                system_instruction=SYSTEM_INSTRUCTION,
-                response_mime_type="application/json",
-                response_schema=AnalysisResult,
-                temperature=0.1,
-            )
+            config=config,
         )
         
         raw_text = response.text
@@ -275,15 +278,17 @@ class GeminiService(AIService):
     async def _call_comparison_model(self, client, model_name: str, prompt: str) -> ComparisonResult:
         from google.genai import types
 
-        response = client.models.generate_content(
+        config = types.GenerateContentConfig(
+            system_instruction=COMPARISON_SYSTEM_INSTRUCTION,
+            response_mime_type="application/json",
+            response_schema=ComparisonResult,
+            temperature=0.1,
+        )
+        response = await asyncio.to_thread(
+            client.models.generate_content,
             model=model_name,
             contents=prompt,
-            config=types.GenerateContentConfig(
-                system_instruction=COMPARISON_SYSTEM_INSTRUCTION,
-                response_mime_type="application/json",
-                response_schema=ComparisonResult,
-                temperature=0.1,
-            )
+            config=config,
         )
         
         raw_text = response.text
@@ -342,15 +347,17 @@ class GeminiService(AIService):
     async def _call_qa_model(self, client, model_name: str, prompt: str) -> QAResponse:
         from google.genai import types
 
-        response = client.models.generate_content(
+        config = types.GenerateContentConfig(
+            system_instruction=QA_SYSTEM_INSTRUCTION,
+            response_mime_type="application/json",
+            response_schema=QAResponse,
+            temperature=0.1,
+        )
+        response = await asyncio.to_thread(
+            client.models.generate_content,
             model=model_name,
             contents=prompt,
-            config=types.GenerateContentConfig(
-                system_instruction=QA_SYSTEM_INSTRUCTION,
-                response_mime_type="application/json",
-                response_schema=QAResponse,
-                temperature=0.1,
-            )
+            config=config,
         )
         
         raw_text = response.text

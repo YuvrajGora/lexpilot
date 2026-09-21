@@ -94,6 +94,15 @@ def test_ask_question_too_long():
     )
     assert response.status_code in [400, 422]
 
+def test_ask_document_text_too_long():
+    long_doc = "A" * 100_001
+    response = client.post(
+        "/api/ask",
+        json={"document_text": long_doc, "question": "What is the rent?"}
+    )
+    assert response.status_code == 400
+    assert "Document text exceeds maximum length limit of 100,000 characters." in response.json()["detail"]
+
 def test_ask_legal_advice_boundary(monkeypatch):
     monkeypatch.setattr(ask_route, "ai_service", MockQAValidService())
     response = client.post(

@@ -67,6 +67,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={onViewResults}
               id="header-view-results-button"
+              aria-label="View analysis results"
               className="inline-flex items-center gap-1 text-xs font-semibold text-stone-700 hover:text-stone-900 px-2.5 py-1.5 rounded-md hover:bg-stone-200/60 transition-colors"
             >
               <FileText className="h-3.5 w-3.5 text-stone-500" aria-hidden="true" />
@@ -78,6 +79,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={onViewComparisonResults}
               id="header-view-comparison-button"
+              aria-label="View comparison results"
               className="inline-flex items-center gap-1 text-xs font-semibold text-stone-700 hover:text-stone-900 px-2.5 py-1.5 rounded-md hover:bg-stone-200/60 transition-colors"
             >
               <GitCompare className="h-3.5 w-3.5 text-stone-500" aria-hidden="true" />

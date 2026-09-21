@@ -31,6 +31,12 @@ async def ask_question(request: AskRequest):
             detail="Document text cannot be empty."
         )
 
+    if len(request.document_text) > 100_000:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Document text exceeds maximum length limit of 100,000 characters."
+        )
+
     response = await ai_service.ask_document_question(
         document_text=request.document_text,
         question=request.question
