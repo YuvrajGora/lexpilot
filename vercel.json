@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://lexpilot-x9wc.onrender.com/api/:path*"
+    }
+  ]
+}
