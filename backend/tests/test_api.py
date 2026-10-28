@@ -97,3 +97,39 @@ def test_upload_valid_document_pipeline(monkeypatch):
     assert result["termination"]["notice_period"] == "15 days cure period"
     assert len(result["attention_items"]) == 1
     assert "Automatic Renewal" in result["attention_items"][0]["title"]
+
+def test_upload_scanned_pdf_pipeline_with_mock_ocr(monkeypatch):
+    import backend.app.routes.analyze as analyze_module
+    import backend.app.services.extractor_service as extractor_module
+    from pypdf import PdfWriter
+
+    monkeypatch.setattr(analyze_module, "ai_service", MockAIService())
+
+    # Mock OCR to simulate transcribed legal text from scanned page
+    monkeypatch.setattr(
+        extractor_module,
+        "ocr_pdf_page",
+        lambda page_bytes, page_num=1: (
+            "This Commercial Lease Agreement is made between Metro Properties (Landlord) "
+            "and LexPilot Inc (Tenant). Rent is $4,500 monthly. Tenant must maintain insurance. "
+            "Notice of non-renewal must be served at least 90 days prior."
+        )
+    )
+
+    # Generate a blank/scanned PDF in memory
+    writer = PdfWriter()
+    writer.add_blank_page(width=300, height=300)
+    buf = io.BytesIO()
+    writer.write(buf)
+    scanned_pdf_bytes = buf.getvalue()
+
+    response = client.post(
+        "/api/analyze",
+        files={"file": ("scanned_lease.pdf", scanned_pdf_bytes, "application/pdf")}
+    )
+    assert response.status_code == 200
+    result = response.json()
+    assert result["document_type"] == "Commercial Lease Agreement"
+    assert "--- Page 1 ---" in result["extracted_text"]
+    assert "Metro Properties" in result["extracted_text"]
+
